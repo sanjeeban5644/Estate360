@@ -13,9 +13,9 @@ public class Flat extends AuditableEntity{
     @Column(name = "flat_no", length = 10)
     private String flatNo;
 
-    @Column(name = "bhk_type", length = 10)
-    private String bhkType;
 
-    @Column(name = "carpet_area")
-    private Double carpetArea;
+
+
+
+
 }

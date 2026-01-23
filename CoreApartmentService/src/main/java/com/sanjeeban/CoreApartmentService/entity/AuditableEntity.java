@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@EntityListeners((AuditingEntityListener.class))
+@EntityListeners(AuditingEntityListener.class)
 public class AuditableEntity {
     @CreatedDate
     @Column(name = "created_at", updatable = false)

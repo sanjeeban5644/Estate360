@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResidentProfileRepository extends JpaRepository<ResidentProfile, Long> {
+
+    boolean existsByresidentId(Long residentId);
 }
 
