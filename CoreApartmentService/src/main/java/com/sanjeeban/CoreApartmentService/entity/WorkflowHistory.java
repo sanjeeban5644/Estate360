@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_workflow_history", schema = "estatedb")
-public class WorkflowHistory {
+public class WorkflowHistory extends AuditableEntity{
     @Id
     @Column(name = "history_id", length = 10)
     private Long historyId;

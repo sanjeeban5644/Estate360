@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_flat", schema = "estatedb")
-public class Flat {
+public class Flat extends AuditableEntity{
     @Id
     @Column(name = "flat_no", length = 10)
     private String flatNo;

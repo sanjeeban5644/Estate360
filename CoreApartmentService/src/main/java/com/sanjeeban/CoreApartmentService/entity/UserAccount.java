@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
         name = "t_user_account",
         schema="estatedb"
 )
-public class UserAccount {
+public class UserAccount extends AuditableEntity{
 
     @Id
     @Column(name="user_id",length = 10)

@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_resident_maintenance", schema = "estatedb")
-public class ResidentMaintenance {
+public class ResidentMaintenance extends AuditableEntity{
     @Id
     @Column(name = "resident_id", length = 10)
     private Long residentId;

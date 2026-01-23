@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_technician", schema = "estatedb")
-public class Technician {
+public class Technician extends AuditableEntity{
     @Id
     @Column(name = "tech_id", length = 10)
     private Long techId;

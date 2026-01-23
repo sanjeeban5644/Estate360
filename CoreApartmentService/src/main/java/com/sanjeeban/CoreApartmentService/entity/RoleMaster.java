@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_role_master", schema = "estatedb")
-public class RoleMaster {
+public class RoleMaster extends AuditableEntity{
     @Id
     @Column(name = "role_id", length = 10)
     private Long roleId;

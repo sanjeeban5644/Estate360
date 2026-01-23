@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_maintenance_rate", schema = "estatedb")
-public class MaintenanceRate {
+public class MaintenanceRate extends AuditableEntity{
     @Id
     @Column(name = "rate_id", length = 10)
     private Long rateId;

@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_complaint_assignment", schema = "estatedb")
-public class ComplaintAssignment {
+public class ComplaintAssignment extends AuditableEntity{
     @Id
     @Column(name = "assignment_id", length = 10)
     private Long assignmentId;

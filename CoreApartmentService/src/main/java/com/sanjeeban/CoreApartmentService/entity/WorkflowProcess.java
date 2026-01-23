@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_workflow_process", schema = "estatedb")
-public class WorkflowProcess {
+public class WorkflowProcess extends AuditableEntity{
     @Id
     @Column(name = "workflow_id", length = 10)
     private Long workflowId;

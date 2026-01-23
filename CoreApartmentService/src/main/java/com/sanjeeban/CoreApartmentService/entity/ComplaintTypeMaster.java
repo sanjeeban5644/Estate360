@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_complaint_type_master", schema = "estatedb")
-public class ComplaintTypeMaster {
+public class ComplaintTypeMaster extends AuditableEntity{
     @Id
     @Column(name = "complaint_type_id", length = 10)
     private Long complaintTypeId;

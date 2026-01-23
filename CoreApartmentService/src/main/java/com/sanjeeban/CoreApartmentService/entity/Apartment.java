@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_apartment", schema = "estatedb")
-public class Apartment {
+public class Apartment extends AuditableEntity{
     @Id
     @Column(name = "apartment_id", length = 10)
     private Long apartmentId;

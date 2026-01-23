@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_workflow_status_master", schema = "estatedb")
-public class WorkflowStatusMaster {
+public class WorkflowStatusMaster extends AuditableEntity{
 
     @Id
     @Column(name = "status_id", length = 10)
