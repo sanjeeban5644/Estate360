@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/DiscoveryClient/pom.xml" />
         <option value="$PROJECT_DIR$/IdentityAndAdminService/pom.xml" />
         <option value="$PROJECT_DIR$/CoreApartmentService/pom.xml" />
+        <option value="$PROJECT_DIR$/NotificationAndDocumentModule/pom.xml" />
       </list>
     </option>
   </component>

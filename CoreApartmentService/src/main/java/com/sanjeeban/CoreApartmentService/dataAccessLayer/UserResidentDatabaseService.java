@@ -1,9 +1,7 @@
 package com.sanjeeban.CoreApartmentService.dataAccessLayer;
 
 
-import com.sanjeeban.CoreApartmentService.customException.ApartmentNotFoundException;
-import com.sanjeeban.CoreApartmentService.customException.IllegalDateFormatException;
-import com.sanjeeban.CoreApartmentService.customException.UserNotFoundException;
+import com.sanjeeban.CoreApartmentService.customException.*;
 import com.sanjeeban.CoreApartmentService.dto.GetAllResidentsResponse;
 import com.sanjeeban.CoreApartmentService.dto.GetAllUsersResponse;
 import com.sanjeeban.CoreApartmentService.dto.SaveNewResidentRequest;
@@ -19,6 +17,7 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.collections4.Get;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -50,9 +49,11 @@ public class UserResidentDatabaseService {
 
         UserAccount newUser = new UserAccount();
         newUser.setUserId(userId);
-        newUser.setUserName("user"+request.getName());
+        newUser.setName(request.getName());
         newUser.setEmail(request.getEmail());
         newUser.setMobile(request.getMobile());
+        newUser.setUserName(request.getUserName());
+        newUser.setPassword(request.getPassword());
         newUser.setStatus("ACTIVE");
 
         userAccountRepository.saveAndFlush(newUser);
@@ -129,5 +130,37 @@ public class UserResidentDatabaseService {
             responseList.add(modelMapper.map(obj,GetAllResidentsResponse.class));
         }
         return responseList;
+    }
+
+    public String getEmailFromUserId(String userId) {
+        Long id;
+        try {
+            id = Long.parseLong(userId);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Invalid userId format: " + userId);
+        }
+        return userAccountRepository.getUserWithUserId(id)
+                .map(UserAccount::getEmail)
+                .orElseThrow(() -> new EmailDoesNotExistsException("Email does not exist for User with userId : "+userId));
+    }
+
+    public String getNameFromUserId(String userId) {
+        Long id;
+        try {
+            id = Long.parseLong(userId);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Invalid userId format: " + userId);
+        }
+        return userAccountRepository.getUserWithUserId(id)
+                .map(UserAccount::getUsername)
+                .orElseThrow(() -> new NameDoesNotExistsException("Name does not exist for User with userId : "+userId));
+    }
+
+    public UserDetails getUserByUserName(String username) {
+        UserDetails obj =  userAccountRepository.getUserByUserName(username)
+                .orElseThrow(() -> new UserNotFoundException("User Not found with UserName : "+username));
+        String user = obj.getUsername();
+        String pass = obj.getPassword();
+        return obj;
     }
 }

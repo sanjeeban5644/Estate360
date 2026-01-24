@@ -40,3 +40,16 @@ VALUES
 (02346, 'C2', '1A', '2BHK', 890.0, true),
 (02347, 'C2', '1B', '3BHK', 1220.0, false),
 (02348, 'C2', '2A', '1BHK', 650.0, true);
+
+
+-- Insert Script 1
+INSERT INTO estatedb.t_user_account
+    (user_id, name, email, mobile, status, user_name, password)
+VALUES
+    (1001, 'John Doe', 'john.doe@example.com', '9876543210', 'ACTIVE', 'user1', '{noop}2002');
+
+-- Insert Script 2
+INSERT INTO estatedb.t_user_account
+    (user_id, name, email, mobile, status, user_name, password)
+VALUES
+    (1002, 'Jane Smith', 'jane.smith@example.com', '9123456780', 'INACTIVE', 'user2', '{noop}2003');

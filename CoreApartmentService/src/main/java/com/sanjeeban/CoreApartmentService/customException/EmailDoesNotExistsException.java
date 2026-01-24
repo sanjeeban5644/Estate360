@@ -1,0 +1,5 @@
+package com.sanjeeban.CoreApartmentService.customException;
+
+public class EmailDoesNotExistsException extends RuntimeException{
+    public EmailDoesNotExistsException(String msg){super(msg);}
+}

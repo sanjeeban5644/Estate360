@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sanjeeban</groupId>
-	<artifactId>CoreApartmentService</artifactId>
+	<artifactId>NotificationAndDocumentService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CoreApartmentService</name>
-	<description>A Software for Apartment Complexes</description>
+	<name>NotificationAndDocumentService</name>
+	<description>Spring project Estate 360.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -98,10 +98,6 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

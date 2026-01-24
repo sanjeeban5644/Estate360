@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/CoreApartmentService/CoreApartmentService.iml" filepath="$PROJECT_DIR$/CoreApartmentService/CoreApartmentService.iml" />
       <module fileurl="file://$PROJECT_DIR$/DiscoveryClient/DiscoveryClient.iml" filepath="$PROJECT_DIR$/DiscoveryClient/DiscoveryClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/IdentityAndAdminService/IdentityAndAdminService.iml" filepath="$PROJECT_DIR$/IdentityAndAdminService/IdentityAndAdminService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NotificationAndDocumentModule/NotificationAndDocumentService.iml" filepath="$PROJECT_DIR$/NotificationAndDocumentModule/NotificationAndDocumentService.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Project10_Estate360.iml" filepath="$PROJECT_DIR$/.idea/Project10_Estate360.iml" />
     </modules>
   </component>

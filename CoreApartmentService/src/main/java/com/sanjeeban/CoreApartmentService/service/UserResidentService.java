@@ -1,11 +1,21 @@
 package com.sanjeeban.CoreApartmentService.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sanjeeban.CoreApartmentService.dataAccessLayer.UserResidentDatabaseService;
 import com.sanjeeban.CoreApartmentService.dto.*;
 import com.sanjeeban.CoreApartmentService.Iservice.IUserResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -17,8 +27,18 @@ public class UserResidentService implements IUserResidentService {
 
 
 
+    private UserResidentDatabaseService userResidentDatabaseService;
+
+    private final DiscoveryClient discoveryClient;
+
+    private final RestClient restClient;
+
     @Autowired
-    UserResidentDatabaseService userResidentDatabaseService;
+    public UserResidentService(UserResidentDatabaseService userResidentDatabaseService,DiscoveryClient discoveryClient,RestClient restClient){
+        this.userResidentDatabaseService = userResidentDatabaseService;
+        this.discoveryClient = discoveryClient;
+        this.restClient = restClient;
+    }
 
 
     @Override
@@ -28,9 +48,11 @@ public class UserResidentService implements IUserResidentService {
         String name = request.getName()==null?"":request.getName();
         String email = request.getEmail()==null?"":request.getEmail();
         String mobile = request.getMobile()==null?"":request.getMobile();
+        String username = request.getUserName()==null?"":request.getUserName();
+        String password = request.getPassword()==null?"":request.getPassword();
         String status  = "ACTIVE";
         
-        String msg = validateRequest(name,email,mobile,status);
+        String msg = validateRequest(name,email,mobile,status,username,password);
         if(!msg.equals("200")){
             response.setResponseCode("400");
             response.setResponseMsg(msg);
@@ -98,8 +120,54 @@ public class UserResidentService implements IUserResidentService {
         response.setResponseCode("201");
         response.setResponseMsg("Saved Details successfully");
         response.setRemarks("Saved");
+        
+        // sending mail to the receiver. 
+        String email = getEmailUsingUserId(request.getUserId());
+        String residentName = getMailUsingUserId(request.getUserId());
+
+
+        String body = "Dear " + residentName + ",\n\n"
+                + "We are delighted to welcome you to our complex! 🎉\n\n"
+                + "Your Resident ID is " + String.valueOf(residentId) + ". This ID will serve as your official identification within the complex. "
+                + "Please keep it safe and use it wisely, as it will be required for access and verification purposes.\n\n"
+                + "We look forward to having you as part of our community.\n\n"
+                + "Warm regards,\n"
+                + "Complex Management Team";
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("sendTo",email);
+        json.put("sendSubject","Welcome to Estate 360");
+        json.put("body",body);
+        json.put("sendFrom","estate360@es.com");
+
+        String emailResponse = "";
+        ServiceInstance notificationService = discoveryClient.getInstances("NotificationAndDocumentService").get(0);
+        URI uri = URI.create(notificationService.getUri().toString()+"/email/sendEmail");
+        System.out.println("Notification Service url is : "+uri);
+        try{
+            emailResponse = restClient.post()
+                    .uri(uri)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(json)
+                    .retrieve()
+                    .body(String.class);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
 
         return response;
+    }
+
+    private String getMailUsingUserId(String userId) {
+        return userResidentDatabaseService.getNameFromUserId(userId);
+    }
+
+    private String getEmailUsingUserId(String userId) {
+        return userResidentDatabaseService.getEmailFromUserId(userId);
     }
 
     @Override
@@ -167,10 +235,10 @@ public class UserResidentService implements IUserResidentService {
         return 10000000 + random.nextLong(90000000);
     }
 
-    private String validateRequest(String name, String email, String mobile, String status) {
+    private String validateRequest(String name, String email, String mobile, String status,String username,String password) {
         String retMsg = "200";
-        if(name.isEmpty() || email.isEmpty() || mobile.isEmpty()){
-            retMsg = "Name, Email and Mobile are mandatory fields.";
+        if(name.isEmpty() || email.isEmpty() || mobile.isEmpty() || username.isEmpty() || password.isEmpty()){
+            retMsg = "Name, Email, Mobile, Username and Password are mandatory fields.";
             return retMsg;
         }
         if(!checkEmail(email)){
@@ -199,7 +267,8 @@ public class UserResidentService implements IUserResidentService {
     }
 
 
-
-
-
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        return userResidentDatabaseService.getUserByUserName(username);
+//    }
 }

@@ -1,9 +1,7 @@
 package com.sanjeeban.CoreApartmentService.advice;
 
 
-import com.sanjeeban.CoreApartmentService.customException.ApartmentNotFoundException;
-import com.sanjeeban.CoreApartmentService.customException.IllegalDateFormatException;
-import com.sanjeeban.CoreApartmentService.customException.UserNotFoundException;
+import com.sanjeeban.CoreApartmentService.customException.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -45,6 +43,32 @@ public class GlobalExceptionHandler {
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.NOT_FOUND.value(),
                 "error", "Date format is incorrect.",
+                "message", ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+
+
+    @ExceptionHandler(EmailDoesNotExistsException.class)
+    public ResponseEntity<Map<String,Object>> handleNoEmailPresentException(EmailDoesNotExistsException ex){
+        Map<String,Object> body = Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.NOT_FOUND.value(),
+                "error", "Email is not present for user",
+                "message", ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+
+
+    @ExceptionHandler(NameDoesNotExistsException.class)
+    public ResponseEntity<Map<String,Object>> handleNoNamePresentException(NameDoesNotExistsException ex){
+        Map<String,Object> body = Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.NOT_FOUND.value(),
+                "error", "Name is not present for user",
                 "message", ex.getMessage()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
