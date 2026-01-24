@@ -1,9 +1,14 @@
 INSERT INTO t_role_master (role_id, role_name) VALUES
-(231, 'Admin'),
+(231, 'ADMIN'),
 (232, 'Manager'),
-(233, 'Resident'),
+(233, 'RESIDENT'),
 (234, 'Technician'),
-(235, 'Security');
+(235, 'Security'),
+(236, 'TENANT');
+
+INSERT INTO estatedb.t_user_role (user_id, role_id) VALUES
+(1001, 231),  -- User 1001 assigned ADMIN role
+(1002, 233);
 
 INSERT INTO t_complaint_type_master (complaint_type_id, complaint_code, complaint_desc) VALUES
 (4001, 'ELEC', 'Electrical Issue'),
@@ -46,10 +51,12 @@ VALUES
 INSERT INTO estatedb.t_user_account
     (user_id, name, email, mobile, status, user_name, password)
 VALUES
-    (1001, 'John Doe', 'john.doe@example.com', '9876543210', 'ACTIVE', 'user1', '{noop}2002');
+    (1001, 'John Doe', 'john.doe@example.com', '9876543210', 'ACTIVE', 'user1', '2002');
 
 -- Insert Script 2
 INSERT INTO estatedb.t_user_account
     (user_id, name, email, mobile, status, user_name, password)
 VALUES
-    (1002, 'Jane Smith', 'jane.smith@example.com', '9123456780', 'INACTIVE', 'user2', '{noop}2003');
+    (1002, 'Jane Smith', 'jane.smith@example.com', '9123456780', 'INACTIVE', 'user2', '2003');
+
+INSERT INTO estatedb.t_user_role (user_id, role_id) VALUES (1,231);

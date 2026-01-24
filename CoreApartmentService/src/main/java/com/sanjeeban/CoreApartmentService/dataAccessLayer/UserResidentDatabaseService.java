@@ -1,32 +1,29 @@
 package com.sanjeeban.CoreApartmentService.dataAccessLayer;
 
 
+import com.netflix.discovery.converters.Auto;
 import com.sanjeeban.CoreApartmentService.customException.*;
 import com.sanjeeban.CoreApartmentService.dto.GetAllResidentsResponse;
 import com.sanjeeban.CoreApartmentService.dto.GetAllUsersResponse;
 import com.sanjeeban.CoreApartmentService.dto.SaveNewResidentRequest;
 import com.sanjeeban.CoreApartmentService.dto.SaveNewUserRequest;
-import com.sanjeeban.CoreApartmentService.entity.Apartment;
-import com.sanjeeban.CoreApartmentService.entity.ResidentProfile;
-import com.sanjeeban.CoreApartmentService.entity.UserAccount;
-import com.sanjeeban.CoreApartmentService.repository.ApartmentRepository;
-import com.sanjeeban.CoreApartmentService.repository.ResidentProfileRepository;
-import com.sanjeeban.CoreApartmentService.repository.UserAccountRepository;
-import jakarta.persistence.AttributeOverride;
+import com.sanjeeban.CoreApartmentService.entity.*;
+import com.sanjeeban.CoreApartmentService.jdbc.JdbcUtil;
+import com.sanjeeban.CoreApartmentService.repository.*;
 import jakarta.transaction.Transactional;
-import org.apache.commons.collections4.Get;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,8 +39,24 @@ public class UserResidentDatabaseService {
     @Autowired
     ResidentProfileRepository residentProfileRepository;
 
+
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    JdbcUtil jdbcUtil;
+
+    @Autowired
+    RoleMasterRepository roleMasterRepository;
+
+    @Autowired
+    UserRoleRepository userRoleRepository;
+    @Autowired
+    public UserResidentDatabaseService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public boolean saveUser(Long userId, SaveNewUserRequest request) {
 
@@ -53,10 +66,31 @@ public class UserResidentDatabaseService {
         newUser.setEmail(request.getEmail());
         newUser.setMobile(request.getMobile());
         newUser.setUserName(request.getUserName());
-        newUser.setPassword(request.getPassword());
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setStatus("ACTIVE");
 
         userAccountRepository.saveAndFlush(newUser);
+
+        // save the role of the user in role table
+        String role = request.getRole();
+        Long roleId = null;
+        try{
+            roleId = roleMasterRepository.getRoleByRoleName(role).getRoleId();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        if(roleId==null){
+            roleId = 0000L;
+        }
+
+        UserRole newUserRoleMapping = new UserRole();
+        newUserRoleMapping.setUserId(userId);
+        newUserRoleMapping.setRoleId(roleId);
+
+        userRoleRepository.save(newUserRoleMapping);
+
 
         return userAccountRepository.existsByUserId(userId);
     }
@@ -152,15 +186,47 @@ public class UserResidentDatabaseService {
             throw new IllegalArgumentException("Invalid userId format: " + userId);
         }
         return userAccountRepository.getUserWithUserId(id)
-                .map(UserAccount::getUsername)
+                .map(UserAccount::getUserName)
                 .orElseThrow(() -> new NameDoesNotExistsException("Name does not exist for User with userId : "+userId));
     }
 
-    public UserDetails getUserByUserName(String username) {
-        UserDetails obj =  userAccountRepository.getUserByUserName(username)
-                .orElseThrow(() -> new UserNotFoundException("User Not found with UserName : "+username));
-        String user = obj.getUsername();
-        String pass = obj.getPassword();
-        return obj;
+    public UserAccount getUserName(String username) {
+        return userAccountRepository.getUserByUserName(username)
+                .orElseThrow(() -> new UserNotFoundException("User does not exist with UserName : "+username));
     }
+
+    public String getRoleFromUserId(Long userId) {
+
+        String role = "";
+        String sqlQuery = "select tr.role_name from \n" +
+                "estatedb.t_role_master tr, \n" +
+                "estatedb.t_user_role tur where \n" +
+                "tr.role_id = tur.role_id\n" +
+                "and tur.user_id=?";
+
+        try(Connection conn = jdbcUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sqlQuery)){
+
+            ps.setLong(1,userId);
+
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    role = rs.getString(1);
+                }
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException("Exception in db connection -1");
+        }
+        return role;
+    }
+
+//    public UserDetails getUserByUserName(String username) {
+//        UserDetails obj =  userAccountRepository.getUserByUserName(username)
+//                .orElseThrow(() -> new UserNotFoundException("User Not found with UserName : "+username));
+//        String user = obj.getUsername();
+//        String pass = obj.getPassword();
+//        return obj;
+//    }
 }

@@ -4,7 +4,7 @@ public class SaveNewUserRequest {
     private String name;
     private String email;
     private String mobile;
-    private String userCode;
+    private String role;
 
     private String userName;
 
@@ -13,11 +13,11 @@ public class SaveNewUserRequest {
     public SaveNewUserRequest() {
     }
 
-    public SaveNewUserRequest(String name, String email, String mobile, String userCode, String userName, String password) {
+    public SaveNewUserRequest(String name, String email, String mobile, String role, String userName, String password) {
         this.name = name;
         this.email = email;
         this.mobile = mobile;
-        this.userCode = userCode;
+        this.role = role;
         this.userName = userName;
         this.password = password;
     }
@@ -47,12 +47,12 @@ public class SaveNewUserRequest {
     }
 
 
-    public String getUserCode() {
-        return userCode;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserCode(String userCode) {
-        this.userCode = userCode;
+    public void setRole(String userCode) {
+        this.role = role;
     }
 
     public String getUserName() {

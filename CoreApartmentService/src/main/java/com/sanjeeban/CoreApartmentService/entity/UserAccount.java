@@ -15,7 +15,7 @@ import java.util.Collection;
         name = "t_user_account",
         schema="estatedb"
 )
-public class UserAccount extends AuditableEntity implements UserDetails {
+public class UserAccount extends AuditableEntity {
 
     @Id
     @Column(name="user_id",length = 10)
@@ -50,6 +50,14 @@ public class UserAccount extends AuditableEntity implements UserDetails {
         this.status = status;
         this.userName = userName;
         this.password = password;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public Long getUserId() {
@@ -99,18 +107,18 @@ public class UserAccount extends AuditableEntity implements UserDetails {
     }
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.userName;
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return null;
+//    }
+//
+//    @Override
+//    public String getPassword() {
+//        return this.password;
+//    }
+//
+//    @Override
+//    public String getUsername() {
+//        return this.userName;
+//    }
 }

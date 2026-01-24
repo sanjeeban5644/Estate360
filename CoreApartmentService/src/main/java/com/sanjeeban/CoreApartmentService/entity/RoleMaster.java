@@ -14,4 +14,28 @@ public class RoleMaster extends AuditableEntity{
 
     @Column(name = "role_name", length = 50)
     private String roleName;
+
+    public RoleMaster() {
+    }
+
+    public RoleMaster(Long roleId, String roleName) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }
