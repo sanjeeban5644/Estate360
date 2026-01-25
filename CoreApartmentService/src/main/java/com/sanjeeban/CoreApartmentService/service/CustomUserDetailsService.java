@@ -27,20 +27,23 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserAccount userAccount = userResidentDatabaseService.getUserName(username);
+    public UserDetails loadUserByUsername(String username) {
+        UserAccount user = userResidentDatabaseService.getUserName(username);
 
-        Long userId = userAccount.getUserId();
-
-        String role = userResidentDatabaseService.getRoleFromUserId(userId);
-
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+userResidentDatabaseService.getRoleFromUserId(userId));
-
-        return new User(
-                userAccount.getUserName(),
-                userAccount.getPassword(),
-                Collections.singletonList(authority));
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + username);
         }
+
+        String role = userResidentDatabaseService.getRoleFromUserId(user.getUserId());
+
+        return User.builder()
+                .username(user.getUserName())
+                .password(user.getPassword())
+                .roles(role) // Spring auto-adds ROLE_
+                .build();
+
+        //return new CustomUserDetails(user,null);
+    }
 
     }
 

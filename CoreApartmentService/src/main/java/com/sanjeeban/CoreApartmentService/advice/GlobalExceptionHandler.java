@@ -74,4 +74,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
+
+
+    @ExceptionHandler(CustomAuthenticationException.class)
+    public ResponseEntity<Map<String,Object>> handleNoNamePresentException(CustomAuthenticationException ex){
+        Map<String,Object> body = Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.NOT_FOUND.value(),
+                "error", "AUTHENTICATION ERROR",
+                "message", ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
 }

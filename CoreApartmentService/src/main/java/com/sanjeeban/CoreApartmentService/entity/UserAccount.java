@@ -20,22 +20,16 @@ public class UserAccount extends AuditableEntity {
     @Id
     @Column(name="user_id",length = 10)
     private Long userId;
-
     @Column(name="name",length=100)
     private String name;
-
     @Column(name="email",length=100)
     private String email;
-
     @Column(name="mobile",length=10)
     private String mobile;
-
     @Column(name="status")
     private String status;
-
     @Column(name="user_name")
     private String userName;
-
     @Column(name="password")
     private String password;
 

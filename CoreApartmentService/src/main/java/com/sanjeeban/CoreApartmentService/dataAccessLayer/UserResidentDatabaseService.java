@@ -1,7 +1,6 @@
 package com.sanjeeban.CoreApartmentService.dataAccessLayer;
 
 
-import com.netflix.discovery.converters.Auto;
 import com.sanjeeban.CoreApartmentService.customException.*;
 import com.sanjeeban.CoreApartmentService.dto.GetAllResidentsResponse;
 import com.sanjeeban.CoreApartmentService.dto.GetAllUsersResponse;
@@ -25,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -100,6 +100,10 @@ public class UserResidentDatabaseService {
                 .orElseThrow(() ->
                         new UserNotFoundException("User Not Found with User Id: " + userId)
                 );
+    }
+
+    public Optional<UserAccount> checkAndReturnUser(Long userId) {
+        return userAccountRepository.getUserWithUserId(userId);
     }
 
     public boolean checkUser(Long userId) {
