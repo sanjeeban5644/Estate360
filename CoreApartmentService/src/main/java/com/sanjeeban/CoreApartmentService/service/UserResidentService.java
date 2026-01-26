@@ -5,13 +5,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sanjeeban.CoreApartmentService.dataAccessLayer.UserResidentDatabaseService;
 import com.sanjeeban.CoreApartmentService.dto.*;
 import com.sanjeeban.CoreApartmentService.Iservice.IUserResidentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -25,6 +26,11 @@ import java.util.regex.Pattern;
 @Service
 public class UserResidentService implements IUserResidentService {
 
+    @Value("${kakfa.topic.user-random_topic}")
+    private String KAFKA_TOPIC_NAME;
+
+    @Value("${kakfa.topic.email-topic}")
+    private String EMAIL_KAFKA_TOPIC;
 
 
     private UserResidentDatabaseService userResidentDatabaseService;
@@ -33,11 +39,14 @@ public class UserResidentService implements IUserResidentService {
 
     private final RestClient restClient;
 
+    private final KafkaTemplate<String,ObjectNode> kafkaTemplate;
+
     @Autowired
-    public UserResidentService(UserResidentDatabaseService userResidentDatabaseService,DiscoveryClient discoveryClient,RestClient restClient){
+    public UserResidentService(UserResidentDatabaseService userResidentDatabaseService, DiscoveryClient discoveryClient, RestClient restClient, KafkaTemplate<String, ObjectNode> kafkaTemplate){
         this.userResidentDatabaseService = userResidentDatabaseService;
         this.discoveryClient = discoveryClient;
         this.restClient = restClient;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -84,14 +93,26 @@ public class UserResidentService implements IUserResidentService {
             response.setRemarks("ERROR");
         }
 
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("sendTo","email");
+        json.put("sendSubject","Welcome to Estate 360");
+        json.put("body","this is the body");
+        json.put("sendFrom","estate360@es.com");
+
+        kafkaTemplate.send(EMAIL_KAFKA_TOPIC,"email-kafka",json);
+
         return response;
     }
 
 
 
     @Override
-    public List<GetAllUsersResponse> getAllUsers() {
-        return userResidentDatabaseService.getAllUsers();
+    public List<GetAllUsersResponse> getAllUsers(int page, int size) {
+        return userResidentDatabaseService.getAllUsers(page,size).getContent();
     }
 
     @Override
@@ -144,6 +165,11 @@ public class UserResidentService implements IUserResidentService {
         json.put("sendFrom","estate360@es.com");
 
         String emailResponse = "";
+
+        // implementing kafka.
+//        kafkaTemplate.send("anuj-events","Kafkaaaaaaa");
+
+
         ServiceInstance notificationService = discoveryClient.getInstances("NotificationAndDocumentService").get(0);
         URI uri = URI.create(notificationService.getUri().toString()+"/email/sendEmail");
         System.out.println("Notification Service url is : "+uri);

@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+kakfa.topic.user-random_topic: user-topic
+
+kakfa.topic.email-topic: email-topic
+
+spring.json.trusted.packages: "*"

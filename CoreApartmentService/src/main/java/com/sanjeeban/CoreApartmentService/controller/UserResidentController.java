@@ -4,6 +4,7 @@ import com.sanjeeban.CoreApartmentService.dto.*;
 import com.sanjeeban.CoreApartmentService.Iservice.IUserResidentService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,8 @@ public class UserResidentController {
 
     @Operation(summary = "This gets all the users",description = "This gets all the users")
     @GetMapping(path="/getAllUsers")
-    public ResponseEntity<List<GetAllUsersResponse>> getAllUsers(){
-        List<GetAllUsersResponse> response = new ArrayList<>();
-        response = iUserResidentService.getAllUsers();
+    public ResponseEntity<List<GetAllUsersResponse>> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        List<GetAllUsersResponse> response = iUserResidentService.getAllUsers(page,size);
         return ResponseEntity.status(HttpStatus.FOUND).body(response);
     }
 

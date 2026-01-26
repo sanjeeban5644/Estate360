@@ -12,6 +12,9 @@ import com.sanjeeban.CoreApartmentService.repository.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -110,15 +113,13 @@ public class UserResidentDatabaseService {
         return userAccountRepository.existsByUserId(userId);
     }
 
-    public List<GetAllUsersResponse> getAllUsers() {
+    public Page<GetAllUsersResponse> getAllUsers(int page,int size) {
         List<GetAllUsersResponse> listOfUsers = new ArrayList<>();
-        List<UserAccount> userList = userAccountRepository.findAll();
-        for(UserAccount user : userList){
-            GetAllUsersResponse obj = new GetAllUsersResponse();
-            obj = modelMapper.map(user,GetAllUsersResponse.class);
-            listOfUsers.add(obj);
-        }
-        return listOfUsers;
+        Pageable pageable = PageRequest.of(page,size);
+        Page<UserAccount> userList = userAccountRepository.findAll(pageable);
+        return userList.map(user ->
+                modelMapper.map(user, GetAllUsersResponse.class)
+        );
     }
 
     public boolean checkApartmentAvailability(Long apartmentId) {
