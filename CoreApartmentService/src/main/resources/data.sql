@@ -25,26 +25,31 @@ INSERT INTO t_workflow_status_master (status_id, status_code, status_desc) VALUE
 (103, 'ASSIGN', 'Technician Assigned. Work In Progress'),
 (104, 'RESOLVED', 'Complaint Resolved'),
 (105, 'CLOSED', 'Closed after Verification');
+INSERT INTO t_workflow_status_master (status_id, status_code, status_desc)
+VALUES (106, 'REJECTED', 'Complaint Rejected');
 
-
-INSERT INTO estatedb.t_apartment
-(apartment_id, block_no, flat_no, bhk_type, carpet_area, availability)
+INSERT INTO estatedb.t_apartment (apartment_id, block_no, flat_no, bhk_type, carpet_area, availability)
 VALUES
-(02334, 'B1', '1A', '2BHK', 850.0, true),
-(02335, 'B1', '1B', '3BHK', 1200.0, false),
-(02336, 'B1', '2A', '1BHK', 650.0, true),
-(02337, 'B1', '2B', '2BHK', 900.0, true),
-(02338, 'B2', '1A', '3BHK', 1250.0, false),
-(02339, 'B2', '1B', '1BHK', 640.0, true),
-(02340, 'B2', '2A', '2BHK', 880.0, true),
-(02341, 'B2', '2B', '3BHK', 1180.0, false),
-(02342, 'C1', '1A', '1BHK', 600.0, true),
-(02343, 'C1', '1B', '2BHK', 870.0, true),
-(02344, 'C1', '2A', '3BHK', 1300.0, false),
-(02345, 'C1', '2B', '1BHK', 620.0, true),
-(02346, 'C2', '1A', '2BHK', 890.0, true),
-(02347, 'C2', '1B', '3BHK', 1220.0, false),
-(02348, 'C2', '2A', '1BHK', 650.0, true);
+(1101, 'A', '101', '1BHK', 550.0, TRUE),
+(1102, 'A', '102', '2BHK', 750.0, TRUE),
+(1103, 'A', '103', '3BHK', 1050.0, FALSE),
+(2201, 'B', '201', '2BHK', 800.0, TRUE),
+(2202, 'B', '202', '1BHK', 600.0, FALSE),
+(2203, 'B', '203', '3BHK', 1100.0, TRUE),
+(3301, 'C', '301', '2BHK', 780.0, TRUE),
+(3302, 'C', '302', '1BHK', 520.0, TRUE),
+(3303, 'C', '303', '3BHK', 1200.0, FALSE),
+(4401, 'D', '401', '2BHK', 850.0, TRUE),
+(4402, 'D', '402', '1BHK', 580.0, TRUE),
+(4403, 'D', '403', '3BHK', 1150.0, FALSE),
+(5501, 'E', '501', '2BHK', 790.0, TRUE),
+(5502, 'E', '502', '1BHK', 560.0, FALSE),
+(5503, 'E', '503', '3BHK', 1250.0, TRUE),
+(6601, 'F', '601', '2BHK', 820.0, TRUE),
+(6602, 'F', '602', '1BHK', 540.0, TRUE),
+(6603, 'F', '603', '3BHK', 1180.0, FALSE),
+(7701, 'G', '701', '2BHK', 880.0, TRUE),
+(7702, 'G', '702', '3BHK', 1300.0, TRUE);
 
 
 -- Insert Script 1
@@ -60,3 +65,24 @@ VALUES
     (1002, 'Jane Smith', 'jane.smith@example.com', '9123456780', 'INACTIVE', 'user2', '2003');
 
 INSERT INTO estatedb.t_user_role (user_id, role_id) VALUES (1,231);
+
+
+INSERT INTO estatedb.t_resident_profile
+(resident_id, user_id, apartment_id, resident_grp_id, resident_type, dob, aadhar, previous_address, current_address)
+VALUES
+(101, 201, 301, 401, 'Owner', '1985-04-12', '123456789012', '12 Old Street, Kolkata', '45 New Avenue, Kolkata'),
+(102, 202, 302, 402, 'Tenant', '1990-07-25', '234567890123', '56 Lake Road, Kolkata', '78 Green Park, Kolkata'),
+(103, 203, 303, 403, 'Owner', '1978-11-05', '345678901234', '89 Hill View, Kolkata', '12 River Side, Kolkata');
+
+INSERT INTO estatedb.t_technician (tech_id, tech_name, tech_mobile)
+VALUES
+(7602, 'Arjun Das', '9876543210'),
+(7603, 'Ravi Kumar', '9123456780'),
+(7604, 'Suman Roy', '9988776655'),
+(7605, 'Priya Sen', '9345678901'),
+(7606, 'Amit Sharma', '9456123789'),
+(7607, 'Neha Gupta', '9567890123'),
+(7608, 'Karan Mehta', '9678901234'),
+(7609, 'Sneha Bose', '9789012345'),
+(7610, 'Vikram Singh', '9890123456'),
+(7611, 'Ananya Mukherjee', '9901234567');

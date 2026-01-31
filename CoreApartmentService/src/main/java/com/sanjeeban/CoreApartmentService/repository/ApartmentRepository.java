@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
-    @Query("SELECT t FROM Apartment t WHERE t.id.apartmentId = :apartmentId")
+    @Query("SELECT t FROM Apartment t WHERE t.apartmentId = :apartmentId")
     public Optional<Apartment> findByApartmentId(@Param("apartmentId") Long apartmentId);
 
 }

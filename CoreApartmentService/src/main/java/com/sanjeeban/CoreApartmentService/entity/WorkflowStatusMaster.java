@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 public class WorkflowStatusMaster extends AuditableEntity{
 
     @Id
-    @Column(name = "status_id", length = 10)
+    @Column(name = "status_id", length = 20)
     private Long statusId;
 
     @Column(name="status_code", length=20)
@@ -19,4 +19,37 @@ public class WorkflowStatusMaster extends AuditableEntity{
 
     @Column(name="status_desc", length=100)
     private String statusDescription;
+
+    public WorkflowStatusMaster() {
+    }
+
+    public WorkflowStatusMaster(Long statusId, String statusCode, String statusDescription) {
+        this.statusId = statusId;
+        this.statusCode = statusCode;
+        this.statusDescription = statusDescription;
+    }
+
+    public Long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getStatusDescription() {
+        return statusDescription;
+    }
+
+    public void setStatusDescription(String statusDescription) {
+        this.statusDescription = statusDescription;
+    }
 }

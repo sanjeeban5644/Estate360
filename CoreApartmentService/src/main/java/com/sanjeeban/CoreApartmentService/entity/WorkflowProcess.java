@@ -17,7 +17,37 @@ public class WorkflowProcess extends AuditableEntity{
     @Column(name = "status_id", length = 10)
     private Long statusId;
 
-    @Column(name = "updated_at")
-    private java.sql.Timestamp updatedAt;
+    public WorkflowProcess() {
+    }
+
+    public WorkflowProcess(Long workflowId, Long complaintId, Long statusId) {
+        this.workflowId = workflowId;
+        this.complaintId = complaintId;
+        this.statusId = statusId;
+    }
+
+    public Long getWorkflowId() {
+        return workflowId;
+    }
+
+    public void setWorkflowId(Long workflowId) {
+        this.workflowId = workflowId;
+    }
+
+    public Long getComplaintId() {
+        return complaintId;
+    }
+
+    public void setComplaintId(Long complaintId) {
+        this.complaintId = complaintId;
+    }
+
+    public Long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
+    }
 }
 

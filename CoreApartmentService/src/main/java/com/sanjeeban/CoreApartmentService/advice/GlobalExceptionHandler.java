@@ -86,5 +86,29 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
+//
 
+    @ExceptionHandler(InvalidComplaintCodeException.class)
+    public ResponseEntity<Map<String,Object>> handleInvalidComplaintCodeException(InvalidComplaintCodeException ex){
+        Map<String,Object> body = Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.NOT_FOUND.value(),
+                "error", "Invalid Complaint Code",
+                "message", ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+//
+
+    @ExceptionHandler(InvalidWorkflowException.class)
+    public ResponseEntity<Map<String,Object>> handleInvalidComplaintCodeException(InvalidWorkflowException ex){
+        Map<String,Object> body = Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.NOT_FOUND.value(),
+                "error", "Invalid Workflow",
+                "message", ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
 }

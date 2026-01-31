@@ -6,8 +6,15 @@ import jakarta.persistence.*;
 @Table(name = "t_apartment", schema = "estatedb")
 public class Apartment extends AuditableEntity{
 
-    @EmbeddedId
-    private ApartmentPrimaryKey apartmentPrimaryKey;
+    @Id
+    @Column(name = "apartment_id", length = 10)
+    private Long apartmentId;
+
+    @Column(name = "block_no", length = 10)
+    private String blockNo;
+
+    @Column(name = "flat_no", length = 10)
+    private String flatNo;
 
     @Column(name = "bhk_type", length = 10)
     private String bhkType;
@@ -22,19 +29,37 @@ public class Apartment extends AuditableEntity{
     public Apartment() {
     }
 
-    public Apartment(ApartmentPrimaryKey apartmentPrimaryKey, String bhkType, Double carpetArea, Boolean availability) {
-        this.apartmentPrimaryKey = apartmentPrimaryKey;
+    public Apartment(Long apartmentId, String blockNo, String flatNo, String bhkType, Double carpetArea, Boolean availability) {
+        this.apartmentId = apartmentId;
+        this.blockNo = blockNo;
+        this.flatNo = flatNo;
         this.bhkType = bhkType;
         this.carpetArea = carpetArea;
         this.availability = availability;
     }
 
-    public ApartmentPrimaryKey getApartmentPrimaryKey() {
-        return apartmentPrimaryKey;
+    public Long getApartmentId() {
+        return apartmentId;
     }
 
-    public void setApartmentPrimaryKey(ApartmentPrimaryKey apartmentPrimaryKey) {
-        this.apartmentPrimaryKey = apartmentPrimaryKey;
+    public void setApartmentId(Long apartmentId) {
+        this.apartmentId = apartmentId;
+    }
+
+    public String getBlockNo() {
+        return blockNo;
+    }
+
+    public void setBlockNo(String blockNo) {
+        this.blockNo = blockNo;
+    }
+
+    public String getFlatNo() {
+        return flatNo;
+    }
+
+    public void setFlatNo(String flatNo) {
+        this.flatNo = flatNo;
     }
 
     public String getBhkType() {

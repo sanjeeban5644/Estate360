@@ -1,13 +1,9 @@
 package com.sanjeeban.CoreApartmentService.repository;
 
-import com.sanjeeban.CoreApartmentService.entity.Complaint;
+import com.sanjeeban.CoreApartmentService.entity.Technician;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
-
-
-
+public interface TechnicianRepository extends JpaRepository<Technician,Long> {
 }
-

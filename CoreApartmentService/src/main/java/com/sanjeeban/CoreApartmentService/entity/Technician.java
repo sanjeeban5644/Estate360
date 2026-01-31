@@ -16,4 +16,37 @@ public class Technician extends AuditableEntity{
 
     @Column(name = "tech_mobile", length = 15)
     private String techMobile;
+
+    public Technician() {
+    }
+
+    public Technician(Long techId, String techName, String techMobile) {
+        this.techId = techId;
+        this.techName = techName;
+        this.techMobile = techMobile;
+    }
+
+    public Long getTechId() {
+        return techId;
+    }
+
+    public void setTechId(Long techId) {
+        this.techId = techId;
+    }
+
+    public String getTechName() {
+        return techName;
+    }
+
+    public void setTechName(String techName) {
+        this.techName = techName;
+    }
+
+    public String getTechMobile() {
+        return techMobile;
+    }
+
+    public void setTechMobile(String techMobile) {
+        this.techMobile = techMobile;
+    }
 }

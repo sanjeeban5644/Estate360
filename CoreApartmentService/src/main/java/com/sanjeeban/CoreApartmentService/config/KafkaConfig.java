@@ -23,6 +23,6 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic emailTopic(){
-        return new NewTopic("EMAIL_KAFKA_TOPIC",3,(short) 1);
+        return new NewTopic(EMAIL_KAFKA_TOPIC,3,(short) 1);
     }
 }
